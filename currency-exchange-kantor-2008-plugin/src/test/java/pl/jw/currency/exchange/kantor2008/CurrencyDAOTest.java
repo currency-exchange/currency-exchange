@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import pl.jw.currency.exchange.api.CurrencyData;
 import pl.jw.currency.exchange.api.ICurrencyDAO;
 
-@ContextConfiguration(locations = "classpath:application-context-dto-kantor.xml")
+@ContextConfiguration(locations = "classpath:application-context-dto.xml")
 public class CurrencyDAOTest extends AbstractJUnit4SpringContextTests {
 
 	@Autowired

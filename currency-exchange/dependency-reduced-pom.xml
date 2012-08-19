@@ -4,7 +4,7 @@
   <groupId>pl.jw</groupId>
   <artifactId>currency-exchange</artifactId>
   <name>currency-exchange for Chudy</name>
-  <version>0.9.2</version>
+  <version>0.9.3</version>
   <description>currency-exchange for Chudy</description>
   <build>
     <sourceDirectory>src</sourceDirectory>

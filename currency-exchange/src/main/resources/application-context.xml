@@ -7,7 +7,7 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<import resource="classpath:application-context-dto-kantor.xml" />
+	<import resource="classpath:application-context-dto.xml" />
 	<import resource="classpath:application-context-gui.xml" />
 
 	<bean id="iDataSynchronizer" class="pl.jw.currencyexchange.data.DataSynchronizer">

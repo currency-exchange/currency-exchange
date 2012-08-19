@@ -23,6 +23,7 @@ import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.text.DefaultFormatter;
 
 import org.apache.log4j.Logger;
@@ -99,7 +100,8 @@ class PanelBoard extends JPanel {
 		setOpaque(true);
 
 		int buttonHeight = 20;
-		Util.setComponentSize(jButtonSynchronize, 180, buttonHeight);
+		jButtonSynchronize.setMinimumSize(new Dimension(180, buttonHeight));
+		jButtonSynchronize.setHorizontalTextPosition(SwingConstants.LEFT);
 
 		jButtonSynchronize.setText("Synchronizacja danych");
 		jButtonSynchronize.setBorderPainted(false);
@@ -112,7 +114,6 @@ class PanelBoard extends JPanel {
 		// delta from the top
 		Box toolBox = new Box(BoxLayout.X_AXIS);
 		toolBox.add(jButtonSynchronize);
-		toolBox.add(Box.createHorizontalGlue());
 
 		add(toolBox);
 		add(Box.createRigidArea(new Dimension(0, 133 - buttonHeight)));

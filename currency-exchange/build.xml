@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="currency-exchange" default="release">
+
+	<property name="version" value="0.91" />
+	<property name="deploy.path" value="./deploy" />
+	<property name="name.version" value="currency-exchange-${version}">
+	</property>
+	<property name="jar.name" value="${name.version}.jar" />
+
+	<target name="clean">
+		<delete dir="${deploy.path}" />
+		<mkdir dir="${deploy.path}" />
+	</target>
+
+	<target name="create-start-script">
+		<echo file="${deploy.path}/${ant.project.name}.bat">call java -jar ${jar.name}</echo>
+	</target>
+
+	<target name="jar" depends="clean">
+		<jar destfile="${deploy.path}/${jar.name}">
+			<manifest>
+				<attribute name="Main-Class" value="pl.jw.currencyexchange.Board" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Version" value="${version}" />
+			</manifest>
+			<fileset dir="./bin" />
+		</jar>
+	</target>
+
+	<target name="package" depends="jar, create-start-script ">
+		<zip destfile="${deploy.path}/${name.version}.zip" basedir="${deploy.path}/">
+		</zip>
+	</target>
+
+	<target name="release" depends="package">
+	</target>
+</project>

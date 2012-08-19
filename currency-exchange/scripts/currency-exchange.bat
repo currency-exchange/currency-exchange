@@ -1,0 +1,1 @@
+call java -jar currency-exchange-0.9.jar

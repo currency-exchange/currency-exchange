@@ -7,7 +7,7 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:property-placeholder location="application-context.properties" />
+	<context:property-placeholder location="application-context-dto.properties" />
 
 	<bean id="iCurrencyDAO" class="pl.jw.currency.exchange.kantor2008.Kantor2008DAO">
 		<property name="dataSource" ref="dataSource" />

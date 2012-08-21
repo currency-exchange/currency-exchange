@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import pl.jw.currencyexchange.Constants;
 import pl.jw.currencyexchange.Util;
 
 public class FrameBoard extends JFrame {
@@ -37,8 +38,6 @@ public class FrameBoard extends JFrame {
 		}
 	}
 
-	private final PanelBackground panelBackground = new PanelBackground();
-
 	@Autowired
 	private PanelBoard panelBoard;
 
@@ -57,11 +56,9 @@ public class FrameBoard extends JFrame {
 
 		// setLocationRelativeTo(null);
 
-		Util.setComponentSize(this, 1024, 768);
-		Util.setComponentSize(panelBackground, 1024, 768);
+		Util.setComponentSize(this, 1024, 768 + 25);
 
-		final BufferedImage backgroundImage = ImageIO.read(ClassLoader.getSystemResource("background.jpg"));
-		panelBackground.initialize(backgroundImage);
+		final BufferedImage backgroundImage = ImageIO.read(ClassLoader.getSystemResource(Constants.IMAGE_BACKGROUND));
 
 		jLayer.setView(panelBoard);
 		jLayer.setUI(new LayerUIBoard(backgroundImage));
@@ -78,7 +75,6 @@ public class FrameBoard extends JFrame {
 		getContentPane().add(horizontalBox);
 		getContentPane().add(Box.createVerticalGlue());
 
-		panelBackground.addMouseListener(new MouseListenerDecoration());
 		panelBoard.addMouseListener(new MouseListenerDecoration());
 
 	}

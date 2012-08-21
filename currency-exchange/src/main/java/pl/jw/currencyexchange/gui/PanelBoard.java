@@ -30,18 +30,18 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import pl.jw.currency.exchange.api.CurrencyData;
+import pl.jw.currencyexchange.Constants;
 import pl.jw.currencyexchange.Util;
 import pl.jw.currencyexchange.data.IDataSynchronizer;
 
 class PanelBoard extends JPanel {
-
 	private final class ListenerTextField extends InputVerifier {
 		@Override
 		public boolean verify(JComponent input) {
 			if (input instanceof JTextField) {
 
 				log.info("\n");
-				for (int i = 0; i < FIELDS_COUNT; i++) {
+				for (int i = 0; i < Constants.FIELDS_COUNT; i++) {
 
 					log.info(MessageFormat.format("{0}: {1} {2}", i, listBuyPrice.get(i).getText(), listSellPrice.get(i).getText()));
 				}
@@ -62,12 +62,6 @@ class PanelBoard extends JPanel {
 	}
 
 	private static Logger log = Logger.getLogger(PanelBoard.class);
-
-	private static final int FIELD_OFFSET_SELL = 130;
-
-	private static final int FIELD_OFFSET_BUY = 515;
-
-	private static final int FIELDS_COUNT = 11;
 
 	private final Set<CurrencyData> setCurrencies = new LinkedHashSet<>();
 	{
@@ -116,9 +110,9 @@ class PanelBoard extends JPanel {
 		toolBox.add(jButtonSynchronize);
 
 		add(toolBox);
-		add(Box.createRigidArea(new Dimension(0, 133 - buttonHeight)));
+		add(Box.createRigidArea(new Dimension(0, 235 - buttonHeight)));
 
-		for (int i = 0; i < FIELDS_COUNT; i++) {
+		for (int i = 0; i < Constants.FIELDS_COUNT; i++) {
 			JFormattedTextField jTextFiledBuyPrice = createTextField();
 			listBuyPrice.add(jTextFiledBuyPrice);
 
@@ -126,9 +120,9 @@ class PanelBoard extends JPanel {
 			listSellPrice.add(jTextFiledSellPrice);
 
 			Box rowBox = new Box(BoxLayout.X_AXIS);
-			rowBox.add(Box.createRigidArea(new Dimension(FIELD_OFFSET_BUY, 0)));
+			rowBox.add(Box.createRigidArea(new Dimension(Constants.FIELD_OFFSET_BUY, 0)));
 			rowBox.add(jTextFiledBuyPrice);
-			rowBox.add(Box.createRigidArea(new Dimension(FIELD_OFFSET_SELL, 0)));
+			rowBox.add(Box.createRigidArea(new Dimension(Constants.FIELD_OFFSET_SELL, 0)));
 			rowBox.add(jTextFiledSellPrice);
 
 			add(rowBox);
@@ -154,16 +148,16 @@ class PanelBoard extends JPanel {
 	}
 
 	private String getCourse(CurrencyData currencyData, BigDecimal price) {
-		BigDecimal curse = price.divide(BigDecimal.valueOf(currencyData.getCount()), RoundingMode.HALF_UP);
+		BigDecimal curse = price.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : price.divide(BigDecimal.valueOf(currencyData.getCount()), RoundingMode.HALF_UP);
 
-		return curse.setScale(5).toPlainString().replace('.', ',');
+		return curse.setScale(Constants.SCALE).toPlainString();
 	}
 
 	private JFormattedTextField createTextField() throws ParseException {
 
 		DefaultFormatter formatter = new DefaultFormatter() {
 
-			private final Pattern pattern = Pattern.compile("[0-9]{0,3}[,]?[0-9]{0,5}");
+			private final Pattern pattern = Pattern.compile(Constants.REG_EXP_COURSE);
 
 			@Override
 			public Object stringToValue(String string) throws ParseException {
@@ -189,7 +183,7 @@ class PanelBoard extends JPanel {
 			// jTextFiled.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		}
 
-		jTextFiled.setText("0,0000");
+		jTextFiled.setText("0.0000");
 
 		jTextFiled.setInputVerifier(new ListenerTextField());
 

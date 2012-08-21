@@ -1,5 +1,6 @@
 package pl.jw.currencyexchange.data;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,9 @@ public class DataSynchronizer implements IDataSynchronizer {
 				BeanUtils.copyProperties(currencyDataSyn, currencyData);
 			} else {
 				log.debug("Data synchronization - checked " + currencyData.getSymbol());
+
+				currencyData.setBuyPrice(BigDecimal.ZERO);
+				currencyData.setSellPrice(BigDecimal.ZERO);
 			}
 		}
 

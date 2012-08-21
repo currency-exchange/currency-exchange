@@ -13,7 +13,7 @@ import pl.jw.currencyexchange.gui.FrameBoard;
 public class Board {
 
 	public static void main(String[] args) throws IOException, ParseException {
-		ApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "application-context.xml" });
+		ApplicationContext context = new ClassPathXmlApplicationContext(new String[] { Constants.APPLICATION_CONTEXT_XML });
 
 		final FrameBoard frameBoard = context.getBean(FrameBoard.class);
 		frameBoard.initialize();

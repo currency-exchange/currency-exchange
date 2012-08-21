@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -40,6 +39,8 @@ class PanelBoard extends JPanel {
 		public boolean verify(JComponent input) {
 			if (input instanceof JTextField) {
 
+				// FIXME: currencies set should be synchronized after change
+
 				log.info("\n");
 				for (int i = 0; i < Constants.FIELDS_COUNT; i++) {
 
@@ -65,17 +66,17 @@ class PanelBoard extends JPanel {
 
 	private final Set<CurrencyData> setCurrencies = new LinkedHashSet<>();
 	{
-		setCurrencies.add(new CurrencyData("EURO", "EUR", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("USA", "USD", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("W. BRYTANIA", "GBP", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("KANADA", "CAD", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("AUSTRALIA", "AUD", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("NORWEGIA", "NOK", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("SZWAJCARIA", "CHF", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("CZECHY", "CZK", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("DANIA", "DKK", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("SZWECJA", "SEK", BigDecimal.ZERO, BigDecimal.ZERO));
-		setCurrencies.add(new CurrencyData("EURO - BILON", "EURb", BigDecimal.ZERO, BigDecimal.ZERO));
+		setCurrencies.add(new CurrencyData("EURO", "EUR", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("USA", "USD", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("W. BRYTANIA", "GBP", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("KANADA", "CAD", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("AUSTRALIA", "AUD", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("NORWEGIA", "NOK", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("SZWAJCARIA", "CHF", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("CZECHY", "CZK", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("DANIA", "DKK", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("SZWECJA", "SEK", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
+		setCurrencies.add(new CurrencyData("EURO - BILON", "EURb", Constants.PRICE_DEFAULT, Constants.PRICE_DEFAULT));
 	}
 
 	private final JButton jButtonSynchronize = new JButton();
@@ -140,17 +141,14 @@ class PanelBoard extends JPanel {
 		int fieldNumber = 0;
 		for (CurrencyData currencyData : setCurrencies) {
 
-			listSellPrice.get(fieldNumber).setText(getCourse(currencyData, currencyData.getSellPrice()));
-			listBuyPrice.get(fieldNumber).setText(getCourse(currencyData, currencyData.getBuyPrice()));
+			String sellPrice = Util.getCourse(currencyData, currencyData.getSellPrice());
+			String buyPrice = Util.getCourse(currencyData, currencyData.getBuyPrice());
+
+			listSellPrice.get(fieldNumber).setText(sellPrice);
+			listBuyPrice.get(fieldNumber).setText(buyPrice);
 
 			++fieldNumber;
 		}
-	}
-
-	private String getCourse(CurrencyData currencyData, BigDecimal price) {
-		BigDecimal curse = price.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : price.divide(BigDecimal.valueOf(currencyData.getCount()), RoundingMode.HALF_UP);
-
-		return curse.setScale(Constants.SCALE).toPlainString();
 	}
 
 	private JFormattedTextField createTextField() throws ParseException {
@@ -169,6 +167,14 @@ class PanelBoard extends JPanel {
 				return super.stringToValue(string);
 			}
 
+			@Override
+			public String valueToString(Object value) throws ParseException {
+				String str = (String) value;
+
+				BigDecimal valueBd = value == null || "".equals(value) ? Constants.PRICE_DEFAULT : new BigDecimal(str);
+				return super.valueToString(Util.priceToString(valueBd));
+			}
+
 		};
 		formatter.setAllowsInvalid(false);
 
@@ -183,7 +189,7 @@ class PanelBoard extends JPanel {
 			// jTextFiled.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 		}
 
-		jTextFiled.setText("0.0000");
+		jTextFiled.setText(Util.priceToString(Constants.PRICE_DEFAULT));
 
 		jTextFiled.setInputVerifier(new ListenerTextField());
 

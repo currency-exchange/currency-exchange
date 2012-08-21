@@ -12,6 +12,8 @@ import javax.swing.SwingUtilities;
 
 import pl.jw.currency.exchange.api.CurrencyData;
 
+import com.google.common.base.Strings;
+
 public class Util {
 
 	public static void setComponentSize(Component jComponent, int width, int height) {
@@ -34,7 +36,21 @@ public class Util {
 	}
 
 	public static String priceToString(BigDecimal curse) {
-		return curse.setScale(Constants.SCALE).stripTrailingZeros().toPlainString();
-	}
+		String str = curse == null ? Constants.PRICE_DEFAULT.toPlainString() : curse.setScale(Constants.SCALE, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
 
+		int indexOfDot = str.indexOf('.');
+		if (indexOfDot < 0) {
+			str = str + '.';
+			str = Strings.padEnd(str, str.length() + Constants.SCALE_MIN, '0');
+		} else {
+
+			int placesAfterDot = str.length() - 1 - indexOfDot;
+			if (placesAfterDot < Constants.SCALE_MIN) {
+				str = Strings.padEnd(str, str.length() + Constants.SCALE_MIN - placesAfterDot, '0');
+
+			}
+		}
+
+		return str;
+	}
 }

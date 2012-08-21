@@ -2,6 +2,8 @@ package pl.jw.currencyexchange.gui;
 
 import java.awt.Color;
 import java.awt.Frame;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -22,20 +24,24 @@ import pl.jw.currencyexchange.Util;
 
 public class FrameBoard extends JFrame {
 
+	private final class ListenerEsc extends KeyAdapter {
+		@Override
+		public void keyReleased(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				changeFrameMode();
+
+				e.consume();
+			}
+
+		}
+	}
+
 	private final class MouseListenerDecoration extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			dispose();
-
-			boolean newState = !isUndecorated();
-			setUndecorated(newState);
-
-			setExtendedState(isUndecorated() ? Frame.MAXIMIZED_BOTH : Frame.NORMAL);
-
-			panelBoard.setState(!newState);
-
-			setVisible(true);
+			changeFrameMode();
 		}
+
 	}
 
 	@Autowired
@@ -77,6 +83,21 @@ public class FrameBoard extends JFrame {
 
 		panelBoard.addMouseListener(new MouseListenerDecoration());
 
+		// panelBoard.addKeyListener(new ListenerEsc());
+
+	}
+
+	private void changeFrameMode() {
+		dispose();
+
+		boolean newState = !isUndecorated();
+		setUndecorated(newState);
+
+		setExtendedState(isUndecorated() ? Frame.MAXIMIZED_BOTH : Frame.NORMAL);
+
+		panelBoard.setState(!newState);
+
+		setVisible(true);
 	}
 
 }

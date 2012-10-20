@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>pl.jw</groupId>
 	<artifactId>currency-exchange</artifactId>
-	<version>0.9.4</version>
+	<version>0.9.6</version>
 	<name>currency-exchange for Chudy</name>
 	<description>currency-exchange for Chudy</description>
 	<packaging>jar</packaging>

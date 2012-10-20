@@ -29,12 +29,27 @@ public class Util {
 		ex.printStackTrace();
 	}
 
+	/**
+	 * Wyznacza kurs na podstawie ceny waluty dla podanej iloœci.
+	 * <p>
+	 * Wymaga utrzymania wysokiej precyzji obliczeñ.
+	 * 
+	 * @param currencyData
+	 * @param price
+	 * @return
+	 */
 	public static String getCourse(CurrencyData currencyData, BigDecimal price) {
-		BigDecimal curse = price.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : price.divide(BigDecimal.valueOf(currencyData.getCount()), RoundingMode.HALF_UP);
+		BigDecimal curse = price.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : price.divide(BigDecimal.valueOf(currencyData.getCount()), 5, RoundingMode.HALF_UP);
 
 		return priceToString(curse);
 	}
 
+	/**
+	 * Konwersja z zachowaniem ustalonej precyzji.
+	 * 
+	 * @param curse
+	 * @return
+	 */
 	public static String priceToString(BigDecimal curse) {
 		String str = curse == null ? Constants.PRICE_DEFAULT.toPlainString() : curse.setScale(Constants.SCALE, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
 

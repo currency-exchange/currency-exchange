@@ -25,7 +25,7 @@ public class UtilBenchmarkJTest {
 	public void setUp() {
 
 		System.setProperty("jub.consumers", "CONSOLE,XML");
-		System.setProperty("jub.xml.file", "target/surefire-reports/jub.xml");
+		System.setProperty("jub.xml.file", "target/surefire-reports/BENCHMARK-JUB-"+getClass().getName()+".xml");
 	}
 
 	@BenchmarkOptions(benchmarkRounds = 10000, concurrency = BenchmarkOptions.CONCURRENCY_AVAILABLE_CORES, warmupRounds = 10)

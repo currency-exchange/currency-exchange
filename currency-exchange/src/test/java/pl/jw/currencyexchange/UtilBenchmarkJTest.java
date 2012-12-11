@@ -2,7 +2,7 @@ package pl.jw.currencyexchange;
 
 import java.math.BigDecimal;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
@@ -21,11 +21,11 @@ public class UtilBenchmarkJTest {
 	@Rule
 	public MethodRule benchmarkRun = new BenchmarkRule();
 
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void setUp() {
 
 		System.setProperty("jub.consumers", "CONSOLE,XML");
-		System.setProperty("jub.xml.file", "target/surefire-reports/BENCHMARK-JUB-"+getClass().getName()+".xml");
+		System.setProperty("jub.xml.file", "target/surefire-reports/BENCHMARK-JUB-"+UtilBenchmarkJTest.class.getName()+".xml");
 	}
 
 	@BenchmarkOptions(benchmarkRounds = 10000, concurrency = BenchmarkOptions.CONCURRENCY_AVAILABLE_CORES, warmupRounds = 10)

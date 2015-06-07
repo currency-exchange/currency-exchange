@@ -6,7 +6,10 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="pl.jw.vabank" level="trace">
+		<Logger name="pl.jw.currencyexchange" level="trace">
+			<AppenderRef ref="Console" />
+		</Logger>
+		<Logger name="org.springframework" level="info">
 			<AppenderRef ref="Console" />
 		</Logger>
 		<Root level="error">

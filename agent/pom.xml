@@ -17,6 +17,20 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>pl.jw</groupId>
@@ -30,19 +44,11 @@
 			<version>2.17</version>
 		</dependency>
 
-		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-data-rest</artifactId> 
-			</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cloud-connectors</artifactId>
 		</dependency>
 
-		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-ws</artifactId> 
-			</dependency> -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -54,62 +60,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-
-			<plugin>
-
-				<!-- Specify the maven code generator plugin -->
-				<groupId>org.jooq</groupId>
-				<artifactId>jooq-codegen-maven</artifactId>
-				<version>3.6.1</version>
-
-				<!-- The plugin should hook into the generate goal -->
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-
-				<!-- Manage the plugin's dependency. In this example, we'll use a PostgreSQL 
-					database -->
-				<dependencies>
-					<dependency>
-						<groupId>org.firebirdsql.jdbc</groupId>
-						<artifactId>jaybird-jdk18</artifactId>
-						<version>2.2.7</version>
-					</dependency>
-				</dependencies>
-
-				<!-- Specify the plugin configuration. The configuration format is the 
-					same as for the standalone code generator -->
-				<configuration>
-
-					<!-- JDBC connection parameters -->
-					<jdbc>
-						<driver>org.firebirdsql.jdbc.FBDriver</driver>
-						<url>jdbc:firebirdsql:localhost/3050:w:/kantor/Kantor2008/Database/Kant2008.fdb?defaultHoldable=true</url>
-						<user>SYSDBA</user>
-						<password>masterkey</password>
-
-					</jdbc>
-
-					<!-- Generator parameters -->
-					<generator>
-						<name>org.jooq.util.DefaultGenerator</name>
-						<database>
-							<name>org.jooq.util.firebird.FirebirdDatabase</name>
-							<includes>.*</includes>
-							<excludes></excludes>
-							<inputSchema></inputSchema>
-						</database>
-						<target>
-							<packageName>org.jooq.util.maven.example</packageName>
-							<directory>target/generated-sources/jooq</directory>
-						</target>
-					</generator>
-				</configuration>
 			</plugin>
 
 		</plugins>

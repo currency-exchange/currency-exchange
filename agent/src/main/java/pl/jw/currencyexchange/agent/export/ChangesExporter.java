@@ -1,4 +1,4 @@
-package pl.jw.currencyexchange.agent;
+package pl.jw.currencyexchange.agent.export;
 
 import org.springframework.stereotype.Repository;
 

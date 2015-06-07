@@ -20,11 +20,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/main/resources/application-context-dto.properties</name>
-			<type>1</type>
-			<location>W:/java/kantor/currency-exchange/currency-exchange-kantor-2008-plugin/src/main/resources/application-context-dto.properties</location>
-		</link>
-	</linkedResources>
 </projectDescription>

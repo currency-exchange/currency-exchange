@@ -1,4 +1,4 @@
-package pl.jw.currencyexchange.agent;
+package pl.jw.currencyexchange.agent.data;
 
 import org.springframework.stereotype.Controller;
 

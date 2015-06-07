@@ -1,4 +1,4 @@
-package pl.jw.vabank.agent;
+package pl.jw.currencyexchange.agent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public class SynchronizationTask {
 	private  DataStateComparator stateComparator;
 	
 	@Scheduled(fixedDelay=60000)
-	//TODO: dok³adneij  - cron="*/5 * * * * MON-FRI"
+	//TODO: dokï¿½adneij  - cron="*/5 * * * * MON-FRI"
 	public void execute() {
 		log.info("JOB - execution");
 	}

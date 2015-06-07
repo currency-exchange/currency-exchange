@@ -28,7 +28,7 @@ public class CurrencyDAOTest extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void get() {
 		List<CurrencyData> list = currencyDAO.get();
-		Assert.assertEquals("", 12, list.size());
+		Assert.assertEquals("", 11, list.size());
 	}
 
 }

@@ -3,7 +3,7 @@ package pl.jw.currency.exchange.dao.api;
 import java.awt.Image;
 import java.math.BigDecimal;
 
-public class CurrencyData {
+public class CurrencyState {
 
 	private String name;
 	private String symbol;
@@ -16,10 +16,10 @@ public class CurrencyData {
 	private BigDecimal forks;
 	private Image flag;
 
-	public CurrencyData() {
+	public CurrencyState() {
 	}
 
-	public CurrencyData(String name, String symbol, BigDecimal sellPrice, BigDecimal buyPrice) {
+	public CurrencyState(String name, String symbol, BigDecimal sellPrice, BigDecimal buyPrice) {
 		super();
 		this.name = name;
 		this.symbol = symbol;
@@ -131,7 +131,7 @@ public class CurrencyData {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CurrencyData other = (CurrencyData) obj;
+		CurrencyState other = (CurrencyState) obj;
 		if (buyPrice == null) {
 			if (other.buyPrice != null)
 				return false;

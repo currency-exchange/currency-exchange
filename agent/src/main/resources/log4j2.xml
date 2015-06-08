@@ -12,6 +12,10 @@
 		<Logger name="org.springframework" level="info">
 			<AppenderRef ref="Console" />
 		</Logger>
+		<Logger name="org.springframework.data" level="debug">
+			<AppenderRef ref="Console" />
+		</Logger>
+		
 		<Root level="error">
 			<AppenderRef ref="Console" />
 		</Root>

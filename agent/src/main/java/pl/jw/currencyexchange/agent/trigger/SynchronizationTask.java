@@ -1,55 +1,51 @@
 package pl.jw.currencyexchange.agent.trigger;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import pl.jw.currency.exchange.dao.api.CurrencyState;
-import pl.jw.currency.exchange.dao.api.ICurrencyDAO;
-import pl.jw.currencyexchange.agent.data.DataStateComparator;
+import pl.jw.currencyexchange.agent.data.DataStateComparators;
+import pl.jw.currencyexchange.agent.data.SynchronizedDataState;
 import pl.jw.currencyexchange.agent.export.ChangesExporter;
-import pl.jw.currencyexchange.agent.export.CurrencyState;
-import pl.jw.currencyexchange.agent.export.CurrencyStateRepository;
+import pl.jw.currencyexchange.agent.importt.ChangesImporter;
 
 @Service
 public class SynchronizationTask {
 
-	private static final Logger log = LogManager
-			.getLogger(SynchronizationTask.class);
+	private static final Logger log = LogManager.getLogger(SynchronizationTask.class);
 
 	@Autowired
-	private ICurrencyDAO dao;
-
-	@Autowired
-	private CurrencyStateRepository stateRepository;
+	private ChangesImporter importer;
 
 	@Autowired
 	private ChangesExporter exporter;
 
-	@Autowired
-	private DataStateComparator stateComparator;
+	private SynchronizedDataState state = new SynchronizedDataState();
 
 	@Scheduled(fixedDelay = 60000)
 	// TODO: dok�adneij - cron="*/5 * * * * MON-FRI"
 	public void execute() {
-		log.info("JOB - execution");
+		log.info("JOB - synchronizer");
 
-		log.info("stored: " + stateRepository.findAll());
+		SynchronizedDataState actualState = importer.importCurrentState();
 
-		List<CurrencyState> list = dao.get();
-		List<CurrencyState> listMongo = list.stream().map(d -> {
-			CurrencyState currencyState = new CurrencyState();
-			currencyState.setLp(d.getOrdinal());
-			currencyState.setState(d.getState());
-			currencyState.setSymbol(d.getSymbol());
+		if (DataStateComparators.isChanged(state, actualState)) {
+			state = actualState;
 
-			return currencyState;
-		}).collect(Collectors.toList());
-		stateRepository.save(listMongo);
+			if (DataStateComparators.changedCurrencyState(state, actualState)) {
+				exporter.synchronizeCurrencyState(actualState.getCurrencyState());
+			}
+
+			if (DataStateComparators.changedCashboxState(state, actualState)) {
+				exporter.synchronizeCashboxState(actualState.getCashboxState());
+			}
+
+			if (DataStateComparators.changedTransactions(state, actualState)) {
+				exporter.synchronizeTransactions(actualState.getTransactions());
+			}
+		}
 	}
+
 }

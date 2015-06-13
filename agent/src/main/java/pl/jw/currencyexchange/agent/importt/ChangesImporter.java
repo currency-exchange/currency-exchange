@@ -12,14 +12,16 @@ import pl.jw.currency.exchange.dao.api.CurrencyState;
 import pl.jw.currency.exchange.dao.api.ICurrencyDAO;
 import pl.jw.currency.exchange.dao.api.Transaction;
 import pl.jw.currencyexchange.agent.data.SynchronizedDataState;
+import pl.jw.currencyexchange.agent.synchronization.IChangesImporter;
 
-public class ChangesImporter {
+public class ChangesImporter implements IChangesImporter {
 
 	private static final Logger log = LogManager.getLogger(ChangesImporter.class);
 
 	@Autowired
 	private ICurrencyDAO dao;
 
+	@Override
 	public SynchronizedDataState importCurrentState() {
 
 		log.info("Data import");

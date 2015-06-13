@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import pl.jw.currencyexchange.agent.data.DataStateComparators;
 import pl.jw.currencyexchange.agent.data.SynchronizedDataState;
-import pl.jw.currencyexchange.agent.export.ChangesExporter;
-import pl.jw.currencyexchange.agent.importt.ChangesImporter;
+import pl.jw.currencyexchange.agent.synchronization.IChangesExporter;
+import pl.jw.currencyexchange.agent.synchronization.IChangesImporter;
 
 @Service
 public class SynchronizationTask {
@@ -17,10 +17,10 @@ public class SynchronizationTask {
 	private static final Logger log = LogManager.getLogger(SynchronizationTask.class);
 
 	@Autowired
-	private ChangesImporter importer;
+	private IChangesImporter importer;
 
 	@Autowired
-	private ChangesExporter exporter;
+	private IChangesExporter exporter;
 
 	private SynchronizedDataState state = new SynchronizedDataState();
 

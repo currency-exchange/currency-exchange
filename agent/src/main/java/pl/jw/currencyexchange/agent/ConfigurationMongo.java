@@ -19,19 +19,19 @@ import com.mongodb.Mongo;
 @PropertySource(value = "classpath:application-mongo-${spring.profiles.active}.properties")
 public class ConfigurationMongo {
 
-	@Value("mongo.host")
+	@Value("${mongo.host}")
 	private String host;
 
-	@Value("mongo.port")
+	@Value("${mongo.port}")
 	private Integer port;
 
-	@Value("mongo.database")
+	@Value("${mongo.database}")
 	private String database;
 
-	@Value("mongo.username")
+	@Value("${mongo.username}")
 	private String username;
 
-	@Value("mongo.password")
+	@Value("${mongo.password}")
 	private String password;
 
 	@Autowired
@@ -52,7 +52,7 @@ public class ConfigurationMongo {
 	}
 
 	@Bean
-	public static PropertySourcesPlaceholderConfigurer getJdbcProperties() {
+	public static PropertySourcesPlaceholderConfigurer getMongoProperties() {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 }

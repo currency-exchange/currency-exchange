@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
-@PropertySource(value = "classpath:application-context-dto-${spring.profiles.active}.properties")
+@PropertySource(value = "classpath:application-jdbc-${spring.profiles.active}.properties")
 public class ConfigurationDatabase {
 
 	@Value(value = "${jdbc.driverClassName}")

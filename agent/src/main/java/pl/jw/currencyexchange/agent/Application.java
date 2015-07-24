@@ -33,6 +33,11 @@ public class Application {
 	// Trigger PeriodicTrigger
 
 	public static void main(String[] args) {
+
+		// TODO: wspolne repo dla wszystkich wioch + kontekst wiochy w kazdym
+		// DTO czy odddzielne?
+		// TODO: agregacja transakcji wg waluta, kupno/sprzedaz
+
 		SpringApplication.run(Application.class, args);
 	}
 

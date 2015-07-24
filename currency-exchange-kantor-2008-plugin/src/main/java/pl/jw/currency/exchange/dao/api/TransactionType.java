@@ -36,7 +36,11 @@ public enum TransactionType {
 				.filter(e -> e.name().equalsIgnoreCase(name.trim()))
 				.findFirst()
 				.orElseThrow(
-						() -> new RuntimeException(MessageFormat.format(
-								"No enum value for name {0} definied.", name)));
+						() -> new RuntimeException(MessageFormat.format("No enum value for name {0} definied.", name)));
 	}
+
+	public boolean isIn() {
+		return this == SELL || this == SELL_TO_BANK || this == IN || this == IN_BANK || this == INPUT;
+	}
+
 }

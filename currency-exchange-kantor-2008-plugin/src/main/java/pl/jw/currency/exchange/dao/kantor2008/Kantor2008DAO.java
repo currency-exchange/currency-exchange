@@ -30,7 +30,7 @@ public class Kantor2008DAO implements ICurrencyDAO {
 	private DSLContext sql;
 
 	private static final class CurrencyDataMapper implements
-			RowMapper<CurrencyState> {
+	RowMapper<CurrencyState> {
 
 		@Override
 		public CurrencyState mapRow(ResultSet rs, int rowNum)
@@ -59,7 +59,7 @@ public class Kantor2008DAO implements ICurrencyDAO {
 	}
 
 	private static final class TransactionaMapper implements
-			RowMapper<Transaction> {
+	RowMapper<Transaction> {
 
 		@Override
 		public Transaction mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -112,7 +112,7 @@ public class Kantor2008DAO implements ICurrencyDAO {
 				+ "    when 20 then 'OUT_BANK'"// WYPŁATA BANK
 				+ "    when 22 then 'INPUT'"// WPROWADZENIE
 				+ "    when 23 then 'OUTPUT'"// WYPROWADZENIE
-				+ "    else 'OTHER'"// WYPROWADZENIE
+				+ "    else 'UNKNOWN'"
 				+ "   end ";
 
 		return this.jdbcTemplate

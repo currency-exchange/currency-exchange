@@ -1,24 +1,25 @@
 package pl.jw.currencyexchange.agent.export;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Repository;
-import pl.jw.currency.exchange.dao.api.CurrencyState;
-import pl.jw.currency.exchange.dao.api.Transaction;
-import pl.jw.currencyexchange.agent.export.data.CashBox;
-import pl.jw.currencyexchange.agent.export.data.Currency;
-import pl.jw.currencyexchange.agent.export.data.DailyCurrencyTransaction;
-import pl.jw.currencyexchange.agent.synchronization.IChangesExporter;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Repository;
+
+import pl.jw.currency.exchange.dao.api.CurrencyState;
+import pl.jw.currency.exchange.dao.api.Transaction;
+import pl.jw.currencyexchange.agent.export.data.CashBox;
+import pl.jw.currencyexchange.agent.export.data.Currency;
+import pl.jw.currencyexchange.agent.export.data.DailyCurrencyTransaction;
+import pl.jw.currencyexchange.agent.synchronization.IChangesExporter;
 
 @Repository
 @PropertySource(value = "classpath:application-location.properties")
@@ -60,38 +61,45 @@ public class ChangesExporter implements IChangesExporter {
 	 */
 	List<DailyCurrencyTransaction> conversionTransaction(List<Transaction> transactions) {
 
-		Map<TransactionKey, BigDecimal> mapByTransactionDirection = Optional.ofNullable(transactions).orElse(new ArrayList<>()).stream()
-				.collect(
-						Collectors.groupingBy(
-								TransactionKey::getInstance,
-								Collectors.mapping(Transaction::getQuantity,
-										Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
+		Map<TransactionKey, BigDecimal> mapByTransactionDirection = mapByTransactionDirection(transactions);
 
 
 
 
 
 		List<DailyCurrencyTransaction> list = new ArrayList<>();
-//		collect.forEach((type, quantity) -> {
-//
-//			DailyCurrencyTransaction t = new DailyCurrencyTransaction();
-//			t.setCurrencySymbol(type.getCurrency());
-//			if (type.isBuy()) {
-//				t.setBought(quantity);
-//			} else {
-//				t.setSold(quantity);
-//			}
-//			t.setDate(LocalDate.now());
-//
-//			t.setLocation(location);
-//
-//			list.add(t);
-//		});
+		//		collect.forEach((type, quantity) -> {
+		//
+		//			DailyCurrencyTransaction t = new DailyCurrencyTransaction();
+		//			t.setCurrencySymbol(type.getCurrency());
+		//			if (type.isBuy()) {
+		//				t.setBought(quantity);
+		//			} else {
+		//				t.setSold(quantity);
+		//			}
+		//			t.setDate(LocalDate.now());
+		//
+		//			t.setLocation(location);
+		//
+		//			list.add(t);
+		//		});
 
 		// list.stream().
 		// TODO:merge tych samych symboli
 
 		return list;
+	}
+
+	Map<TransactionKey, BigDecimal> mapByTransactionDirection(List<Transaction> transactions) {
+		Map<TransactionKey, BigDecimal> mapByTransactionDirection = Optional.ofNullable(transactions).orElse(new ArrayList<>()).stream()
+				.collect(
+						Collectors.groupingBy(
+								TransactionKey::getInstance,
+								Collectors.mapping(Transaction::getQuantity,
+
+										Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
+
+		return mapByTransactionDirection;
 	}
 
 	@Override
@@ -122,23 +130,56 @@ public class ChangesExporter implements IChangesExporter {
 
 	static class TransactionKey {
 		private final String currency;
-		private final boolean buy;
+		private final boolean plus;
 
 		public TransactionKey(String currency, boolean buy) {
 			this.currency = currency;
-			this.buy = buy;
+			this.plus = buy;
 		}
 
 		public static TransactionKey getInstance(Transaction t) {
-			return new TransactionKey(t.getCurrencySymbol(), t.getType().isIn());
+			return new TransactionKey(t.getCurrencySymbol(), t.getType().isPlus());
 		}
 
 		public String getCurrency() {
 			return currency;
 		}
 
-		public boolean isBuy() {
-			return buy;
+		public boolean isPlus() {
+			return plus;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + (plus ? 1231 : 1237);
+			result = prime * result + ((currency == null) ? 0 : currency.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			TransactionKey other = (TransactionKey) obj;
+			if (plus != other.plus)
+				return false;
+			if (currency == null) {
+				if (other.currency != null)
+					return false;
+			} else if (!currency.equals(other.currency))
+				return false;
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "[currency=" + currency + ", plus=" + plus + "]";
 		}
 	}
 

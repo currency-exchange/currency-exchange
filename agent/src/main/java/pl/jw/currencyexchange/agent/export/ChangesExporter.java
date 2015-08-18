@@ -14,7 +14,6 @@ import pl.jw.currencyexchange.agent.export.data.DailyCurrencyTransaction;
 import pl.jw.currencyexchange.agent.synchronization.IChangesExporter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,32 +53,40 @@ public class ChangesExporter implements IChangesExporter {
 		return cashBox;
 	}
 
+	/**
+	 * Converts transactions by grouping (quantity summing) it according to it's direction and currency.
+	 * @param transactions
+	 * @return
+	 */
 	List<DailyCurrencyTransaction> conversionTransaction(List<Transaction> transactions) {
 
-		Map<TransactionKey, Double> collect = Optional.ofNullable(transactions).orElse(new ArrayList<>()).stream()
+		Map<TransactionKey, BigDecimal> mapByTransactionDirection = Optional.ofNullable(transactions).orElse(new ArrayList<>()).stream()
 				.collect(
 						Collectors.groupingBy(
 								TransactionKey::getInstance,
 								Collectors.mapping(Transaction::getQuantity,
-										Collectors.summingDouble(BigDecimal::doubleValue))));
+										Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
+
+
+
+
 
 		List<DailyCurrencyTransaction> list = new ArrayList<>();
-		collect.forEach((type, quantity) -> {
-			BigDecimal q = new BigDecimal(quantity);
-
-			DailyCurrencyTransaction t = new DailyCurrencyTransaction();
-			t.setCurrencySymbol(type.getCurrency());
-			if (type.isBuy()) {
-				t.setBought(q);
-			} else {
-				t.setSold(q);
-			}
-			t.setDate(LocalDate.now());
-
-			t.setLocation(location);
-
-			list.add(t);
-		});
+//		collect.forEach((type, quantity) -> {
+//
+//			DailyCurrencyTransaction t = new DailyCurrencyTransaction();
+//			t.setCurrencySymbol(type.getCurrency());
+//			if (type.isBuy()) {
+//				t.setBought(quantity);
+//			} else {
+//				t.setSold(quantity);
+//			}
+//			t.setDate(LocalDate.now());
+//
+//			t.setLocation(location);
+//
+//			list.add(t);
+//		});
 
 		// list.stream().
 		// TODO:merge tych samych symboli

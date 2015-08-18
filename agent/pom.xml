@@ -62,6 +62,11 @@
 			<artifactId>spock-core</artifactId>
 			<version>1.0-groovy-2.4</version>
 		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy</artifactId>
+			<version>2.4.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

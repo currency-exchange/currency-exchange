@@ -44,7 +44,7 @@ public enum TransactionType {
 	 * @return
 	 */
 	public boolean isZero() {
-		return this == SELL || this == SELL_TO_BANK || this == IN || this == IN_BANK || this == INPUT;
+		return this == CANCELATION || this == UNKNOWN;
 	}
 
 	/**

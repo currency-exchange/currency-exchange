@@ -91,7 +91,10 @@ public class ChangesExporter implements IChangesExporter {
 	}
 
 	Map<TransactionKey, BigDecimal> mapByTransactionDirection(List<Transaction> transactions) {
-		Map<TransactionKey, BigDecimal> mapByTransactionDirection = Optional.ofNullable(transactions).orElse(new ArrayList<>()).stream()
+		Map<TransactionKey, BigDecimal> mapByTransactionDirection = Optional.ofNullable(transactions)
+				.orElse(new ArrayList<>()).stream()
+				// filter canceled or unknown
+				.filter(t -> !t.getType().isZero())
 				.collect(
 						Collectors.groupingBy(
 								TransactionKey::getInstance,

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
 
-public class DailyCurrencyTransaction implements ILocation {
+public class DailyCurrencyTransaction implements ILocation, Cloneable {
 
 	@Id
 	private LocalDate date;
@@ -113,4 +113,12 @@ public class DailyCurrencyTransaction implements ILocation {
 				+ currencySymbol + ", bought=" + bought + ", sold=" + sold + "]";
 	}
 
+	@Override
+	protected Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

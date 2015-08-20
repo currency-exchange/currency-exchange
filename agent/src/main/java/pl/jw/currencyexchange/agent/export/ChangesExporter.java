@@ -1,6 +1,7 @@
 package pl.jw.currencyexchange.agent.export;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,9 @@ public class ChangesExporter implements IChangesExporter {
 	}
 
 	/**
-	 * Converts transactions by grouping (quantity summing) it according to it's direction and currency.
+	 * Converts transactions by grouping (quantity summing) it according to it's
+	 * direction and currency.
+	 *
 	 * @param transactions
 	 * @return
 	 */
@@ -63,31 +66,47 @@ public class ChangesExporter implements IChangesExporter {
 
 		Map<TransactionKey, BigDecimal> mapByTransactionDirection = mapByTransactionDirection(transactions);
 
+		// conversion
+		List<DailyCurrencyTransaction> list = mapByTransactionDirection.entrySet().stream().map((entry) -> {
+
+			DailyCurrencyTransaction t = new DailyCurrencyTransaction();
+			t.setCurrencySymbol(entry.getKey().getCurrency());
+			if (entry.getKey().isPlus()) {
+				t.setBought(entry.getValue());
+			} else {
+				t.setSold(entry.getValue());
+			}
+			t.setDate(LocalDate.now());
+
+			t.setLocation(location);
+
+			return t;
+		}).collect(Collectors.toList());
 
 
+		return mergeCurrenciesBoughtSold(list);
+	}
 
+	private BigDecimal notNull(BigDecimal b) {
+		return b == null ? BigDecimal.ZERO : b;
+	}
 
-		List<DailyCurrencyTransaction> list = new ArrayList<>();
-		//		collect.forEach((type, quantity) -> {
-		//
-		//			DailyCurrencyTransaction t = new DailyCurrencyTransaction();
-		//			t.setCurrencySymbol(type.getCurrency());
-		//			if (type.isBuy()) {
-		//				t.setBought(quantity);
-		//			} else {
-		//				t.setSold(quantity);
-		//			}
-		//			t.setDate(LocalDate.now());
-		//
-		//			t.setLocation(location);
-		//
-		//			list.add(t);
-		//		});
+	private BigDecimal sum(BigDecimal a, BigDecimal b) {
+		return a == null && b == null ? null : notNull(a).add(notNull(b));
+	}
 
-		// list.stream().
-		// TODO:merge tych samych symboli
+	List<DailyCurrencyTransaction> mergeCurrenciesBoughtSold(List<DailyCurrencyTransaction> list) {
+		// merge of values for the same symbols
+		Map<Object, DailyCurrencyTransaction> m = Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
+				.collect(Collectors.groupingBy(t -> t.getCurrencySymbol(),
+						Collectors.reducing(new DailyCurrencyTransaction(), (a, b) -> {
 
-		return list;
+							b.setBought(sum(a.getBought(), b.getBought()));
+							b.setSold(sum(a.getSold(), b.getSold()));
+							return b;
+						})));
+
+		return new ArrayList<>(m.values());
 	}
 
 	Map<TransactionKey, BigDecimal> mapByTransactionDirection(List<Transaction> transactions) {
@@ -95,12 +114,9 @@ public class ChangesExporter implements IChangesExporter {
 				.orElse(new ArrayList<>()).stream()
 				// filter canceled or unknown
 				.filter(t -> !t.getType().isZero())
-				.collect(
-						Collectors.groupingBy(
-								TransactionKey::getInstance,
-								Collectors.mapping(Transaction::getQuantity,
+				.collect(Collectors.groupingBy(TransactionKey::getInstance, Collectors.mapping(Transaction::getQuantity,
 
-										Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
+						Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
 
 		return mapByTransactionDirection;
 	}

@@ -56,6 +56,27 @@ class ChangesExplorerTest extends Specification {
 		[(new TransactionKey('PLN', false)): 16.00g, (new TransactionKey('PLN', true)): 91.00g, (new TransactionKey('GBP', false)): 101.00g, (new TransactionKey('GBP', true)): 4.00g]
 	}
 
+	def mergeCurrenciesBoughtSold(){
+		when:
+		def List<DailyCurrencyTransaction> data = new ChangesExporter().mergeCurrenciesBoughtSold(transactions)
+
+		then:
+		MatcherAssert.assertThat data, result.isEmpty() ?  Matchers.empty() : Matchers.contains(result.toArray())
+
+		where:
+		transactions || result
+		null || []
+		[]|| []
+		[new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g, sold: null, location: null, date:null)]
+		[new DailyCurrencyTransaction(currencySymbol: 'PLN', sold: 23.1g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN',  bought: null,sold: 23.1g, location: null, date: null)]
+		//both directions
+		[new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g), new DailyCurrencyTransaction(currencySymbol: 'PLN', sold: 3.56g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g, sold: 3.56, location: null, date: null)]
+		//different currencies
+		[new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g), new DailyCurrencyTransaction(currencySymbol: 'GBP', sold: 3.56g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g, sold: null, location: null, date: null), new DailyCurrencyTransaction(currencySymbol: 'GBP', bought: null, sold: 3.56g, location: null, date: null)]
+		//more then 2 objects of same currency
+		[new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g), new DailyCurrencyTransaction(currencySymbol: 'PLN', sold: 3.56g), new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g), new DailyCurrencyTransaction(currencySymbol: 'PLN', sold: 3.56g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 2*23.1g, sold: 2*3.56, location: null, date: null)]
+	}
+
 	def conversionTransaction() {
 
 		when:

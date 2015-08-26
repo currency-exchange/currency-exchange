@@ -1,9 +1,11 @@
 package pl.jw.currencyexchange.agent.export.data;
 
-import org.springframework.data.annotation.Id;
-
 import java.math.BigDecimal;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "currenciesState")
 public class Currency implements ILocation {
 
 	@Id

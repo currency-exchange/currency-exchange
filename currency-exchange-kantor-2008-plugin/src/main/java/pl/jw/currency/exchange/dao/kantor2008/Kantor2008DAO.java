@@ -115,7 +115,7 @@ public class Kantor2008DAO implements ICurrencyDAO {
 				+ "    else 'UNKNOWN'"
 				+ "   end ";
 
-		return this.jdbcTemplate
+		List<Transaction> list = this.jdbcTemplate
 				.query("select PARAGON.NUMER, PARAGON.NUMER_OPISOWY, "
 						+ "case POZ_PARAGONU.rodzaj"
 						+ caseRodzaj
@@ -142,6 +142,8 @@ public class Kantor2008DAO implements ICurrencyDAO {
 						+ " where PARAGON.RODZAJ in (12,13) and PARAGON.SPOSOB_ZAPLATY_ID is null and PARAGON.DATA = '"
 						+ today + "'" + " order by 1 desc",
 						new TransactionaMapper());
+
+		return list;
 	}
 
 	@Override

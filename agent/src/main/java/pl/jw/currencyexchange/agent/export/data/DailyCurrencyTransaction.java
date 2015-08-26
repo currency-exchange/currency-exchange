@@ -4,12 +4,20 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "dailyTransactionsSummary")
+@CompoundIndexes({ @CompoundIndex(name = "index-location-date", def = "{'location': 1, 'date': 1}") })
 public class DailyCurrencyTransaction implements ILocation, Cloneable {
 
 	@Id
+	@Indexed
 	private LocalDate date;
 
+	@Indexed
 	private String location;
 
 	private String currencySymbol;

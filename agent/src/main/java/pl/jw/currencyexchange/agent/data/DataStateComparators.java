@@ -17,7 +17,8 @@ public class DataStateComparators {
 	}
 
 	public static boolean changedCashboxState(SynchronizedDataState state, SynchronizedDataState actualState) {
-		return state.getCashboxState().compareTo(actualState.getCashboxState()) != 0;
+		return isChanged((before, after) -> before.getCashboxState().compareTo(after.getCashboxState()), state,
+				actualState);
 	}
 
 	public static boolean changedCurrencyState(SynchronizedDataState state, SynchronizedDataState actualState) {

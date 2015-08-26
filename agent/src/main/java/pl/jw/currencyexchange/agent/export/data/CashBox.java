@@ -3,7 +3,9 @@ package pl.jw.currencyexchange.agent.export.data;
 import java.math.BigDecimal;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "cashBox")
 public class CashBox implements ILocation {
 
 	@Id

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@ComponentScan({ "pl.jw.currency.exchange" })
+@ComponentScan({ "pl.jw.currency.exchange", "pl.jw.currencyexchange.agent" })
 @EnableScheduling
 @EnableMongoRepositories
 @Import(ConfigurationMongo.class)

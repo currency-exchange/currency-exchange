@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import pl.jw.currency.exchange.dao.api.CurrencyState;
 import pl.jw.currency.exchange.dao.api.ICurrencyDAO;
@@ -14,6 +15,7 @@ import pl.jw.currency.exchange.dao.api.Transaction;
 import pl.jw.currencyexchange.agent.data.SynchronizedDataState;
 import pl.jw.currencyexchange.agent.synchronization.IChangesImporter;
 
+@Service
 public class ChangesImporter implements IChangesImporter {
 
 	private static final Logger log = LogManager.getLogger(ChangesImporter.class);

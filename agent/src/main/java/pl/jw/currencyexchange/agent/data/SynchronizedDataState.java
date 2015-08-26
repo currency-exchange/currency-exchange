@@ -1,6 +1,7 @@
 package pl.jw.currencyexchange.agent.data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.jw.currency.exchange.dao.api.CurrencyState;
@@ -8,11 +9,9 @@ import pl.jw.currency.exchange.dao.api.Transaction;
 
 public class SynchronizedDataState {
 
-	private List<Transaction> listTransactions;
-
-	private List<CurrencyState> listCurrencyState;
-
-	private BigDecimal cashboxState;
+	private List<Transaction> listTransactions = new ArrayList<>();
+	private List<CurrencyState> listCurrencyState = new ArrayList<>();
+	private BigDecimal cashboxState = BigDecimal.ZERO;
 
 	public SynchronizedDataState() {
 	}

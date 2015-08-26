@@ -27,7 +27,7 @@ import pl.jw.currencyexchange.agent.synchronization.IChangesExporter;
 public class ChangesExporter implements IChangesExporter {
 
 	private static final Logger log = LogManager.getLogger(ChangesExporter.class);
-	@Value(value = "location")
+	@Value(value = "${location}")
 	private String location;
 	@Autowired
 	private ICurrencyRepository currencyRepository;

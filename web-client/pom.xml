@@ -9,15 +9,44 @@
 		<relativePath>../monitor-distributed</relativePath>
 	</parent>
 
-	<groupId>pl.jw.vabank</groupId>
+	<groupId>pl.jw.currencyexchange.web</groupId>
 	<artifactId>web-client</artifactId>
 	<packaging>war</packaging>
-	<name>web-client Maven Webapp</name>
+	<name>web-client</name>
 
-	<url>http://maven.apache.org</url>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jersey</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>pl.jw.currencyexchange.model.mongo</groupId>
+			<artifactId>model-mongo</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
+
 	<build>
 		<finalName>web-client</finalName>
 	</build>

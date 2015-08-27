@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-parent</artifactId>
-		<version>1.2.3.RELEASE</version>
+		<version>1.2.5.RELEASE</version>
 	</parent>
 
 	<groupId>pl.jw.currencyexchange</groupId>
@@ -17,23 +17,27 @@
 		<java.version>1.8</java.version>
 	</properties>
 
-
 	<modules>
-		
 		<module>
   		../currency-exchange/currency-exchange-kantor-2008-plugin
   	</module>
-		<module>../currency-exchange/web-client</module>
+		<module>../currency-exchange/model-mongo</module>
 		<module>../currency-exchange/agent</module>
-		<module>model-mongo</module>
+		<module>../currency-exchange/web-client</module>
 	</modules>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.spockframework</groupId>
 			<artifactId>spock-core</artifactId>

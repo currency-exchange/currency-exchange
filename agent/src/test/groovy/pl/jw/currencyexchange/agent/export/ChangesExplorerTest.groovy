@@ -8,7 +8,7 @@ import org.hamcrest.Matchers
 import pl.jw.currency.exchange.dao.api.Transaction
 import pl.jw.currency.exchange.dao.api.TransactionType
 import pl.jw.currencyexchange.agent.export.ChangesExporter.TransactionKey
-import pl.jw.currencyexchange.agent.export.data.DailyCurrencyTransaction
+import pl.jw.currencyexchange.agent.export.data.TransactionsSummaryDaily
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -64,7 +64,7 @@ class ChangesExplorerTest extends Specification {
 
 	def mergeCurrenciesBoughtSold(){
 		when:
-		def List<DailyCurrencyTransaction> data = new ChangesExporter().mergeCurrenciesBoughtSold(transactions)
+		def List<TransactionsSummaryDaily> data = new ChangesExporter().mergeCurrenciesBoughtSold(transactions)
 
 		then:
 		assertEmptyOrContains(data, result)
@@ -73,14 +73,14 @@ class ChangesExplorerTest extends Specification {
 		transactions || result
 		null || []
 		[]|| []
-		[new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g, sold: null, location: null, date:null)]
-		[new DailyCurrencyTransaction(currencySymbol: 'PLN', sold: 23.1g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN',  bought: null,sold: 23.1g, location: null, date: null)]
+		[new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 23.1g)]|| [new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 23.1g, sold: null, location: null, date:null)]
+		[new TransactionsSummaryDaily(currencySymbol: 'PLN', sold: 23.1g)]|| [new TransactionsSummaryDaily(currencySymbol: 'PLN',  bought: null,sold: 23.1g, location: null, date: null)]
 		//both directions
-		[new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g), new DailyCurrencyTransaction(currencySymbol: 'PLN', sold: 3.56g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g, sold: 3.56, location: null, date: null)]
+		[new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 23.1g), new TransactionsSummaryDaily(currencySymbol: 'PLN', sold: 3.56g)]|| [new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 23.1g, sold: 3.56, location: null, date: null)]
 		//different currencies
-		[new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g), new DailyCurrencyTransaction(currencySymbol: 'GBP', sold: 3.56g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g, sold: null, location: null, date: null), new DailyCurrencyTransaction(currencySymbol: 'GBP', bought: null, sold: 3.56g, location: null, date: null)]
+		[new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 23.1g), new TransactionsSummaryDaily(currencySymbol: 'GBP', sold: 3.56g)]|| [new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 23.1g, sold: null, location: null, date: null), new TransactionsSummaryDaily(currencySymbol: 'GBP', bought: null, sold: 3.56g, location: null, date: null)]
 		//more then 2 objects of same currency
-		[new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g), new DailyCurrencyTransaction(currencySymbol: 'PLN', sold: 3.56g), new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 23.1g), new DailyCurrencyTransaction(currencySymbol: 'PLN', sold: 3.56g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 2*23.1g, sold: 2*3.56, location: null, date: null)]
+		[new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 23.1g), new TransactionsSummaryDaily(currencySymbol: 'PLN', sold: 3.56g), new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 23.1g), new TransactionsSummaryDaily(currencySymbol: 'PLN', sold: 3.56g)]|| [new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 2*23.1g, sold: 2*3.56, location: null, date: null)]
 	}
 
 
@@ -88,7 +88,7 @@ class ChangesExplorerTest extends Specification {
 	def conversionTransaction() {
 
 		when:
-		def List<DailyCurrencyTransaction> data = new ChangesExporter().conversionTransaction(transactions)
+		def List<TransactionsSummaryDaily> data = new ChangesExporter().conversionTransaction(transactions)
 
 		then:
 		assertEmptyOrContains(data, result)
@@ -97,9 +97,9 @@ class ChangesExplorerTest extends Specification {
 		transactions || result
 		null || []
 		[]|| []
-		[new Transaction(currencySymbol: 'PLN', number: '1', price: 12.22g, quantity: 23.1g, type: TransactionType.BUY, value: 1.6g)]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: null, sold: 23.1g, location: null, date: LocalDate.now())]
+		[new Transaction(currencySymbol: 'PLN', number: '1', price: 12.22g, quantity: 23.1g, type: TransactionType.BUY, value: 1.6g)]|| [new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: null, sold: 23.1g, location: null, date: LocalDate.now())]
 		//both directions
-		[new Transaction(type: TransactionType.BUY, quantity: 12.45g, currencySymbol: 'PLN', number: '1'), new Transaction(type: TransactionType.SELL, quantity: 86.19g, currencySymbol: 'PLN', number: '2')]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 86.19g, sold: 12.45g, location: null, date: LocalDate.now())]
+		[new Transaction(type: TransactionType.BUY, quantity: 12.45g, currencySymbol: 'PLN', number: '1'), new Transaction(type: TransactionType.SELL, quantity: 86.19g, currencySymbol: 'PLN', number: '2')]|| [new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 86.19g, sold: 12.45g, location: null, date: LocalDate.now())]
 
 		[
 			new Transaction(type: TransactionType.BUY, quantity: 12.45g, currencySymbol: 'PLN', number: '1'),
@@ -109,6 +109,6 @@ class ChangesExplorerTest extends Specification {
 			new Transaction(type: TransactionType.SELL, quantity: 124.67g, currencySymbol: 'GBP', number: '5'),
 			new Transaction(type: TransactionType.SELL, quantity: 45.79g, currencySymbol: 'GBP', number: '6'),
 			new Transaction(type: TransactionType.SELL, quantity: 8.25g, currencySymbol: 'GBP', number: '7')
-		]|| [new DailyCurrencyTransaction(currencySymbol: 'PLN', bought: 2*86.19g, sold: 2*12.45g, location: null, date: LocalDate.now()), new DailyCurrencyTransaction(currencySymbol: 'GBP', bought: 124.67g + 45.79g + 8.25g, sold: null, location: null, date: LocalDate.now())]
+		]|| [new TransactionsSummaryDaily(currencySymbol: 'PLN', bought: 2*86.19g, sold: 2*12.45g, location: null, date: LocalDate.now()), new TransactionsSummaryDaily(currencySymbol: 'GBP', bought: 124.67g + 45.79g + 8.25g, sold: null, location: null, date: LocalDate.now())]
 	}
 }

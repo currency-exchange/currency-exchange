@@ -2,19 +2,23 @@ package pl.jw.currencyexchange.agent.export.data;
 
 import java.math.BigDecimal;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+//embedded document
+public class Currency {
 
-@Document(collection = "currenciesState")
-public class Currency implements ILocation {
+	private String symbol;
 
-	@Id
-	private String id;
-
-	private String location;
-	private int ordinal;
 	private String name;
+
+	private int ordinal;
 	private BigDecimal state;
+
+	public String getSymbol() {
+		return symbol;
+	}
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
 
 	public int getOrdinal() {
 		return ordinal;
@@ -40,33 +44,14 @@ public class Currency implements ILocation {
 		this.state = state;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	@Override
-	public String getLocation() {
-		return location;
-	}
-
-	@Override
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ordinal;
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result + ((symbol == null) ? 0 : symbol.hashCode());
 		return result;
 	}
 
@@ -79,16 +64,6 @@ public class Currency implements ILocation {
 		if (getClass() != obj.getClass())
 			return false;
 		Currency other = (Currency) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -101,13 +76,17 @@ public class Currency implements ILocation {
 				return false;
 		} else if (!state.equals(other.state))
 			return false;
+		if (symbol == null) {
+			if (other.symbol != null)
+				return false;
+		} else if (!symbol.equals(other.symbol))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Currency [id=" + id + ", location=" + location + ", ordinal=" + ordinal + ", name=" + name + ", state="
-				+ state + "]";
+		return "Currency [symbol=" + symbol + ", name=" + name + ", ordinal=" + ordinal + ", state=" + state + "]";
 	}
 
 }

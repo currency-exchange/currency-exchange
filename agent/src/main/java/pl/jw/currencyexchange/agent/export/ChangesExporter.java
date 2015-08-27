@@ -19,7 +19,8 @@ import pl.jw.currency.exchange.dao.api.CurrencyState;
 import pl.jw.currency.exchange.dao.api.Transaction;
 import pl.jw.currencyexchange.agent.export.data.CashBox;
 import pl.jw.currencyexchange.agent.export.data.Currency;
-import pl.jw.currencyexchange.agent.export.data.DailyCurrencyTransaction;
+import pl.jw.currencyexchange.agent.export.data.Location;
+import pl.jw.currencyexchange.agent.export.data.TransactionsSummaryDaily;
 import pl.jw.currencyexchange.agent.synchronization.IChangesExporter;
 
 @Repository
@@ -27,23 +28,22 @@ import pl.jw.currencyexchange.agent.synchronization.IChangesExporter;
 public class ChangesExporter implements IChangesExporter {
 
 	private static final Logger log = LogManager.getLogger(ChangesExporter.class);
+
 	@Value(value = "${location}")
 	private String location;
+
 	@Autowired
-	private ICurrencyRepository currencyRepository;
-	@Autowired
-	private ICashBoxRepository cashBoxRepository;
+	private ILocationRepository locationRepository;
 	@Autowired
 	private ITransactionRepository transactionRepository;
 
 	private List<Currency> conversion(List<CurrencyState> list) {
 		return list.stream().map(d -> {
 			Currency currencyState = new Currency();
-			currencyState.setId(d.getSymbol());
+			currencyState.setSymbol(d.getSymbol());
 			currencyState.setOrdinal(d.getOrdinal());
 			currencyState.setState(d.getState());
 			currencyState.setName(d.getName());
-			currencyState.setLocation(location);
 			return currencyState;
 		}).collect(Collectors.toList());
 	}
@@ -51,7 +51,6 @@ public class ChangesExporter implements IChangesExporter {
 	private CashBox conversion(BigDecimal cashboxState) {
 		CashBox cashBox = new CashBox();
 		cashBox.setState(cashboxState);
-		cashBox.setLocation(location);
 		return cashBox;
 	}
 
@@ -62,14 +61,14 @@ public class ChangesExporter implements IChangesExporter {
 	 * @param transactions
 	 * @return
 	 */
-	List<DailyCurrencyTransaction> conversionTransaction(List<Transaction> transactions) {
+	List<TransactionsSummaryDaily> conversionTransaction(List<Transaction> transactions) {
 
 		Map<TransactionKey, BigDecimal> mapByTransactionDirection = mapByTransactionDirection(transactions);
 
 		// conversion
-		List<DailyCurrencyTransaction> list = mapByTransactionDirection.entrySet().stream().map((entry) -> {
+		List<TransactionsSummaryDaily> list = mapByTransactionDirection.entrySet().stream().map((entry) -> {
 
-			DailyCurrencyTransaction t = new DailyCurrencyTransaction();
+			TransactionsSummaryDaily t = new TransactionsSummaryDaily();
 			t.setCurrencySymbol(entry.getKey().getCurrency());
 			if (entry.getKey().isPlus()) {
 				t.setBought(entry.getValue());
@@ -83,7 +82,6 @@ public class ChangesExporter implements IChangesExporter {
 			return t;
 		}).collect(Collectors.toList());
 
-
 		return mergeCurrenciesBoughtSold(list);
 	}
 
@@ -95,11 +93,11 @@ public class ChangesExporter implements IChangesExporter {
 		return a == null && b == null ? null : notNull(a).add(notNull(b));
 	}
 
-	List<DailyCurrencyTransaction> mergeCurrenciesBoughtSold(List<DailyCurrencyTransaction> list) {
+	List<TransactionsSummaryDaily> mergeCurrenciesBoughtSold(List<TransactionsSummaryDaily> list) {
 		// merge of values for the same symbols
-		Map<Object, DailyCurrencyTransaction> m = Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
+		Map<Object, TransactionsSummaryDaily> m = Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
 				.collect(Collectors.groupingBy(t -> t.getCurrencySymbol(),
-						Collectors.reducing(new DailyCurrencyTransaction(), (a, b) -> {
+						Collectors.reducing(new TransactionsSummaryDaily(), (a, b) -> {
 
 							b.setBought(sum(a.getBought(), b.getBought()));
 							b.setSold(sum(a.getSold(), b.getSold()));
@@ -121,30 +119,45 @@ public class ChangesExporter implements IChangesExporter {
 		return mapByTransactionDirection;
 	}
 
-	@Override
-	public void synchronizeCurrencyState(List<CurrencyState> set) {
-		log.info("Synchronization - currency - before: {0}", currencyRepository.findAll());
-
-		List<Currency> listMongo = conversion(set);
-
-		log.info("Synchronization - currency - after: {0}", listMongo);
-
-		currencyRepository.save(listMongo);
-	}
-
-	@Override
-	public void synchronizeCashboxState(BigDecimal cashboxState) {
-		log.info("Synchronization - cashbox");
-
-		CashBox cashbox = conversion(cashboxState);
-		cashBoxRepository.save(cashbox);
-	}
-
-	@Override
-	public void synchronizeTransactions(List<Transaction> transactions) {
+	public List<TransactionsSummaryDaily> synchronizeTransactions(List<Transaction> transactions) {
 		log.info("Synchronization - transactions");
 
-		transactionRepository.save(conversionTransaction(transactions));
+		return transactionRepository.save(conversionTransaction(transactions));
+	}
+
+	@Override
+	public void synchronize(List<Transaction> transactions, BigDecimal cashboxState,
+			List<CurrencyState> currenciesState) {
+
+		log.info("Synchronization - before: {0}", locationRepository.findAll());
+		LocalDate date = LocalDate.now();
+
+		// clean transactions from today - might have changed/been deleted or
+		// simply added
+		transactionRepository.deleteByLocationAndDate(location, date);
+		// add current state of transactions
+		List<TransactionsSummaryDaily> listSynchronizedTransactions = synchronizeTransactions(transactions);
+
+		// update data
+		Location data = Optional.ofNullable(locationRepository.findOne(location)).orElse(new Location());
+
+		prepareLocationData(data, cashboxState, currenciesState, listSynchronizedTransactions);
+
+		data = locationRepository.save(data);
+
+		log.info("Synchronization - currency - after: {0}", data);
+	}
+
+	private Location prepareLocationData(Location data, BigDecimal cashboxState, List<CurrencyState> currenciesState,
+			List<TransactionsSummaryDaily> listSynchronizedTransactions) {
+		data.setId(location);
+		data.setCashBoxState(conversion(cashboxState));
+		data.setCurrencyState(conversion(currenciesState));
+		// stores all transactions so daily transactions are just added
+		List<TransactionsSummaryDaily> list = Optional.ofNullable(data.getTransactions()).orElse(new ArrayList<>());
+		list.addAll(listSynchronizedTransactions);
+		data.setTransactions(list);
+		return data;
 	}
 
 	static class TransactionKey {

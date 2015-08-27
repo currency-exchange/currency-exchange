@@ -2,25 +2,10 @@ package pl.jw.currencyexchange.agent.export.data;
 
 import java.math.BigDecimal;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+//embedded document
+public class CashBox {
 
-@Document(collection = "cashBox")
-public class CashBox implements ILocation {
-
-	@Id
-	private String location;
 	private BigDecimal state;
-
-	@Override
-	public String getLocation() {
-		return location;
-	}
-
-	@Override
-	public void setLocation(String location) {
-		this.location = location;
-	}
 
 	public BigDecimal getState() {
 		return state;
@@ -34,7 +19,6 @@ public class CashBox implements ILocation {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		return result;
 	}
@@ -48,11 +32,6 @@ public class CashBox implements ILocation {
 		if (getClass() != obj.getClass())
 			return false;
 		CashBox other = (CashBox) obj;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
 		if (state == null) {
 			if (other.state != null)
 				return false;
@@ -63,7 +42,7 @@ public class CashBox implements ILocation {
 
 	@Override
 	public String toString() {
-		return "CashBox [location=" + location + ", state=" + state + "]";
+		return "CashBox [state=" + state + "]";
 	}
 
 }

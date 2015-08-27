@@ -10,8 +10,8 @@
 		<relativePath>../monitor-distributed</relativePath>
 	</parent>
 
-	<groupId>pl.jw.vabank</groupId>
-	<artifactId>klient</artifactId>
+	<groupId>pl.jw.currencyexchange.agent</groupId>
+	<artifactId>agent</artifactId>
 
 	<dependencies>
 		<dependency>
@@ -36,18 +36,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>2.17</version>
+			<groupId>pl.jw.currencyexchange.model.mongo</groupId>
+			<artifactId>model-mongo</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-cloud-connectors</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>2.17</version>
 		</dependency>
 
 	</dependencies>

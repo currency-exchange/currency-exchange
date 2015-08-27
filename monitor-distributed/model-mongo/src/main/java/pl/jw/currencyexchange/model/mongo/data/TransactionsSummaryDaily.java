@@ -1,4 +1,4 @@
-package pl.jw.currencyexchange.agent.export.data;
+package pl.jw.currencyexchange.model.mongo.data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -25,6 +25,7 @@
   	</module>
 		<module>../currency-exchange/web-client</module>
 		<module>../currency-exchange/agent</module>
+		<module>model-mongo</module>
 	</modules>
 
 	<dependencies>

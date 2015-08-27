@@ -1,4 +1,4 @@
-package pl.jw.currencyexchange.agent;
+package pl.jw.currencyexchange.model.mongo;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -12,11 +12,13 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 
 @Configuration
+@EnableMongoRepositories
 @PropertySource(value = "classpath:application-mongo-${spring.profiles.active}.properties")
 public class ConfigurationMongo extends AbstractMongoConfiguration {
 

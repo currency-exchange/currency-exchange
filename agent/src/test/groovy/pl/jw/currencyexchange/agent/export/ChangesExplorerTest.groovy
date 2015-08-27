@@ -8,7 +8,7 @@ import org.hamcrest.Matchers
 import pl.jw.currency.exchange.dao.api.Transaction
 import pl.jw.currency.exchange.dao.api.TransactionType
 import pl.jw.currencyexchange.agent.export.ChangesExporter.TransactionKey
-import pl.jw.currencyexchange.agent.export.data.TransactionsSummaryDaily
+import pl.jw.currencyexchange.model.mongo.data.TransactionsSummaryDaily
 import spock.lang.Specification
 import spock.lang.Unroll
 

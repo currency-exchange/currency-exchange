@@ -4,13 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import pl.jw.currencyexchange.model.mongo.ConfigurationMongo;
 
 @SpringBootApplication
 @ComponentScan({ "pl.jw.currency.exchange", "pl.jw.currencyexchange.agent" })
 @EnableScheduling
-@EnableMongoRepositories
+
 @Import(ConfigurationMongo.class)
 public class Application {
 
@@ -33,10 +34,6 @@ public class Application {
 	// Trigger PeriodicTrigger
 
 	public static void main(String[] args) {
-
-		// TODO: wspolne repo dla wszystkich wioch + kontekst wiochy w kazdym
-		// DTO czy odddzielne?
-		// TODO: agregacja transakcji wg waluta, kupno/sprzedaz
 
 		SpringApplication.run(Application.class, args);
 	}

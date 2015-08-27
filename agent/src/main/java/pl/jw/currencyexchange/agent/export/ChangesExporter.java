@@ -17,11 +17,13 @@ import org.springframework.stereotype.Repository;
 
 import pl.jw.currency.exchange.dao.api.CurrencyState;
 import pl.jw.currency.exchange.dao.api.Transaction;
-import pl.jw.currencyexchange.agent.export.data.CashBox;
-import pl.jw.currencyexchange.agent.export.data.Currency;
-import pl.jw.currencyexchange.agent.export.data.Location;
-import pl.jw.currencyexchange.agent.export.data.TransactionsSummaryDaily;
 import pl.jw.currencyexchange.agent.synchronization.IChangesExporter;
+import pl.jw.currencyexchange.model.mongo.dao.ILocationRepository;
+import pl.jw.currencyexchange.model.mongo.dao.ITransactionRepository;
+import pl.jw.currencyexchange.model.mongo.data.CashBox;
+import pl.jw.currencyexchange.model.mongo.data.Currency;
+import pl.jw.currencyexchange.model.mongo.data.Location;
+import pl.jw.currencyexchange.model.mongo.data.TransactionsSummaryDaily;
 
 @Repository
 @PropertySource(value = "classpath:application-location.properties")

@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-parent</artifactId>
 		<version>1.2.5.RELEASE</version>
-		<relativePath/>
+		<relativePath />
 	</parent>
 
 	<groupId>pl.jw.currencyexchange</groupId>
@@ -20,12 +20,10 @@
 	</properties>
 
 	<modules>
-		<module>
-  		../currency-exchange/currency-exchange-kantor-2008-plugin
-  	</module>
-		<module>../currency-exchange/model-mongo</module>
-		<module>../currency-exchange/agent</module>
-		<module>../currency-exchange/web-client</module>
+		<module>../currency-exchange-kantor-2008-plugin</module>
+		<module>../model-mongo</module>
+		<module>../agent</module>
+		<module>../web-client</module>
 	</modules>
 
 	<dependencies>

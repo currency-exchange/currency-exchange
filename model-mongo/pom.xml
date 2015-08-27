@@ -5,6 +5,7 @@
 		<groupId>pl.jw.currencyexchange</groupId>
 		<artifactId>monitor-distributed</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../monitor-distributed</relativePath>
 	</parent>
 	<groupId>pl.jw.currencyexchange.model.mongo</groupId>
 	<artifactId>model-mongo</artifactId>

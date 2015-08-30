@@ -1,0 +1,42 @@
+
+<h1>Dane:</h1>
+<div ng-show="authenticated">
+
+	<!-- - autorefresh przy zmianie danych -->
+
+	<div class="container-fluid" ng-repeat="l in locations">
+
+		<div class="row">
+			<div class="col-xs-2">Lokalizacja:</div>
+			<div class="col-xs-2">{{ l.id }}</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-2">Stan kasy:</div>
+			<div class="col-xs-1">{{ l.cashBoxState.state }}</div>
+			<div class="col-xs-1">PLN</div>
+		</div>
+
+		<div class="row">
+			<!-- 
+			koszyk walut - dolna tabelka
+			- skup/sprz euro w danym dniu
+			- kupno wg waluty,
+			- sprzedaz wg waluty,
+			 -->
+			<!-- <div  class="table-striped table-hover table-condensed"> -->
+			<div class="container-fluid">
+
+				<div class="row" ng-repeat="c in l.currencyState">
+					<div class="col-xs-2">{{ c.name }}</div>
+					<div class="col-xs-1">{{ c.state }}</div>
+					<div class="col-xs-1">{{ c.symbol }}</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div ng-show="!authenticated">
+	<p>Nale¿y siê zalogowaæ</p>
+</div>
